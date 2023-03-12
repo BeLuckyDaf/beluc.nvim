@@ -284,6 +284,8 @@ vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { de
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
+vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
+
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
@@ -488,8 +490,24 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
+		{name = "nvim_lsp", priority = 9},
+		{name = "nvim_lua", priority = 8},
+		{name = "buffer", priority = 7, keyword_length = 3, max_item_count=10},
+		{name = "dictionary", priority = 5, keyword_length = 5, keyword_pattern = [[\w\+]], max_item_count=4},
+		{name = "path", priority = 4},
+		{name = "calc", priority = 3},
+	},
+
+	sorting = {
+		priority_weight = 1.0,
+		comparators = {
+		  cmp.config.compare.locality,
+		  cmp.config.compare.recently_used,
+		  cmp.config.compare.score,
+		  cmp.config.compare.offset,
+		  cmp.config.compare.order,
+		  cmp.config.compare.scope,
+		},
   },
 }
 
